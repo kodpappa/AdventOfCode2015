@@ -30,6 +30,37 @@ int getPaperNeeds(int length, int width, int height)
     return 2 * sideA + 2 * sideB + 2 * sideC + smallest;
 }
 
+int getRibbonLength(int a, int b, int c)
+{
+    int smaller1;
+    int smaller2;
+    int biggest;
+
+    if (a > b && a > c)
+    {
+        biggest = a;
+        smaller1 = c;
+        smaller2 = b;
+    }
+    else if (b > a && b > c)
+    {
+        biggest = b;
+        smaller1 = a;
+        smaller2 = c;
+    }
+
+    else if (c > a && b > a)
+    {
+        biggest = c;
+        smaller1 = a;
+        smaller2 = b;
+    }
+
+    int bowLength = a * b * c;
+
+    return smaller1 * 2 + smaller2 * 2 + bowLength;
+}
+
 int main()
 {
     cout << getPaperNeeds(2, 3, 4);
@@ -38,8 +69,13 @@ int main()
     cout << "\n";
     cout << getPaperNeeds(3, 11, 24);
     cout << "\n";
+    cout << getRibbonLength(2, 3, 4);
+    cout << "\n";
+    cout << getRibbonLength(1, 1, 10);
+    cout << "\n";
 
     int totalNeed = 0;
+    int ribbonNeed = 0;
 
     fstream inputFile;
     inputFile.open("input.txt", ios::in);
@@ -73,13 +109,15 @@ int main()
 
             dimensionValues[dimension] = stoi(s);
             int need = getPaperNeeds(dimensionValues[0], dimensionValues[1], dimensionValues[2]);
-            cout << need;
-            cout << "\n";
+            int ribbonLength = getRibbonLength(dimensionValues[0], dimensionValues[1], dimensionValues[2]);
             totalNeed = totalNeed + need;
+            ribbonNeed = ribbonNeed + ribbonLength;
         }
         inputFile.close();
 
         cout << "Total paper need: ";
         cout << totalNeed;
+        cout << "\nTotal ribbon length: ";
+        cout << ribbonNeed;
     }
 }
