@@ -5,73 +5,51 @@
 
 using namespace std;
 
-int getSmallest(int a, int b, int c)
+int getPaperNeeds(int *numbers)
 {
-    int smallest = a;
-    if (b < smallest)
-    {
-        smallest = b;
-    }
-    if (c < smallest)
-    {
-        smallest = c;
-    }
+    int sideA = numbers[0] * numbers[1];
+    int sideB = numbers[1] * numbers[2];
+    int sideC = numbers[0] * numbers[2];
 
-    return smallest;
+    return 2 * sideA + 2 * sideB + 2 * sideC + numbers[0];
 }
 
-int getPaperNeeds(int length, int width, int height)
+int getRibbonLength(int *numbers)
 {
-    int sideA = length * width;
-    int sideB = width * height;
-    int sideC = height * length;
-    int smallest = getSmallest(sideA, sideB, sideC);
+    int bowLength = numbers[0] * numbers[1] * numbers[2];
 
-    return 2 * sideA + 2 * sideB + 2 * sideC + smallest;
+    return numbers[0] + numbers[0] + numbers[1] + numbers[1] + bowLength;
 }
 
-int getRibbonLength(int a, int b, int c)
+void bubbleSort(int *arr, int n)
 {
-    int smaller1;
-    int smaller2;
-    int biggest;
-
-    if (a > b && a > c)
-    {
-        biggest = a;
-        smaller1 = c;
-        smaller2 = b;
-    }
-    else if (b > a && b > c)
-    {
-        biggest = b;
-        smaller1 = a;
-        smaller2 = c;
-    }
-
-    else if (c > a && b > a)
-    {
-        biggest = c;
-        smaller1 = a;
-        smaller2 = b;
-    }
-
-    int bowLength = a * b * c;
-
-    return smaller1 * 2 + smaller2 * 2 + bowLength;
+    int i, j;
+    for (i = 0; i < n - 1; i++)
+        for (j = 0; j < n - i - 1; j++)
+            if (arr[j] > arr[j + 1])
+                swap(arr[j], arr[j + 1]);
 }
 
 int main()
 {
-    cout << getPaperNeeds(2, 3, 4);
+    int arr1[] = {1, 3, 4};
+    cout << getPaperNeeds(arr1);
     cout << "\n";
-    cout << getPaperNeeds(1, 1, 10);
+
+    int arr2[] = {1, 1, 10};
+    cout << getPaperNeeds(arr2);
     cout << "\n";
-    cout << getPaperNeeds(3, 11, 24);
+
+    int arr3[] = {3, 11, 24};
+    cout << getPaperNeeds(arr3);
     cout << "\n";
-    cout << getRibbonLength(2, 3, 4);
+
+    int arr4[] = {2, 3, 4};
+    cout << getRibbonLength(arr4);
     cout << "\n";
-    cout << getRibbonLength(1, 1, 10);
+
+    int arr5[] = {1, 1, 10};
+    cout << getRibbonLength(arr5);
     cout << "\n";
 
     int totalNeed = 0;
@@ -108,8 +86,10 @@ int main()
             }
 
             dimensionValues[dimension] = stoi(s);
-            int need = getPaperNeeds(dimensionValues[0], dimensionValues[1], dimensionValues[2]);
-            int ribbonLength = getRibbonLength(dimensionValues[0], dimensionValues[1], dimensionValues[2]);
+            bubbleSort(dimensionValues, 3);
+
+            int need = getPaperNeeds(dimensionValues);
+            int ribbonLength = getRibbonLength(dimensionValues);
             totalNeed = totalNeed + need;
             ribbonNeed = ribbonNeed + ribbonLength;
         }
