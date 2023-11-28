@@ -20,16 +20,33 @@ int main()
     std::string directions((std::istreambuf_iterator<char>(file)),
                            std::istreambuf_iterator<char>());
 
-    Location currentLocation;
-    currentLocation.x = 0;
-    currentLocation.y = 0;
-    currentLocation.numberOfPresents = 1;
+    Location currentSantaLocation;
+    currentSantaLocation.x = 0;
+    currentSantaLocation.y = 0;
+    currentSantaLocation.numberOfPresents = 1;
+
+    Location currentRoboLocation;
+    currentRoboLocation.x = 0;
+    currentRoboLocation.y = 0;
+    currentRoboLocation.numberOfPresents = 1;
 
     std::vector<Location> locations;
-    locations.push_back(currentLocation);
+    locations.push_back(currentSantaLocation);
 
+    int i = 1;
     for each (char direction in directions)
     {
+        Location currentLocation;
+
+        if (i % 2 == 0)
+        {
+            currentLocation = currentSantaLocation;
+        }
+        else
+        {
+            currentLocation = currentRoboLocation;
+        }
+
         Location newLocation;
         if (direction == '<')
         {
@@ -54,9 +71,8 @@ int main()
 
         bool isElementNew = true;
 
-        for each (Location location in locations)
+        for (auto location : locations)
         {
-
             if ((location.x == newLocation.x) && (location.y == newLocation.y))
             {
                 location.numberOfPresents = location.numberOfPresents + 1;
@@ -71,7 +87,16 @@ int main()
             locations.push_back(newLocation);
         }
 
-        currentLocation = newLocation;
+        if (i % 2 == 0)
+        {
+            currentSantaLocation = newLocation;
+        }
+        else
+        {
+            currentRoboLocation = newLocation;
+        };
+
+        i++;
     }
     int visitsWithPresents = 0;
     for each (Location location in locations)
